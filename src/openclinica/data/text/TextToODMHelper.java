@@ -28,7 +28,7 @@ import org.w3c.dom.Element;
 
 public class TextToODMHelper {
 
-	
+	private String[] columnNms;
 
 	public String transformTextToODMxml(String rawMappingStr,String rawItemData) {
 		
@@ -46,7 +46,8 @@ public class TextToODMHelper {
 		String itemDataXMLValue;
 		
 		ArrayList itemDataValues;
-		String fileNm;
+		String fileNm;		
+		
 		
 
 	     /**
@@ -64,7 +65,14 @@ public class TextToODMHelper {
 
 		try {
 			
-			String[] columnNms = getDataColumnNames(rawItemData);	
+			columnNms = getDataColumnNames(rawItemData);	
+			
+			if(this.hasParticipantIDColumn()) {
+				;
+			}else {
+				return "errorCode.noParticipantIDinDataFile";
+			}
+			
 			HashMap  mappedValues = getDataMappedValues(rawMappingStr,columnNms); 
 			
 			studyOID =(String) mappedValues.get("StudyOID");
@@ -432,6 +440,16 @@ public class TextToODMHelper {
 		
 		Matcher matcher = pattern.matcher(rawMappingStrRowsStr);		
 		return matcher.matches();
+	}
+	
+	public  boolean hasParticipantIDColumn() {
+		
+		for(int i=0; i < this.columnNms.length; i++) {
+			if(columnNms[i].trim().equals("ParticipantID")) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }
