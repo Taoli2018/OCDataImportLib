@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -348,9 +350,9 @@ public class TextToODMHelper {
 		//Loop through all the rows 
 		for(int j=0;j<rawMappingStrRows.length;j++){
 			
+			String rawMappingStrRowsStr = rawMappingStrRows[j];								
 			
-			
-		     keyValueStr = rawMappingStrRows[j].split("=");	
+		     keyValueStr = rawMappingStrRowsStr.split("=");	
 		     //logger.info("++keyValueStr======================+" +keyValueStr);
 		    
 		     if(keyValueStr.length < 2) {
@@ -370,30 +372,36 @@ public class TextToODMHelper {
 			    	mappedValues.put(key, val);		 		    		 			    		 			          
 			    }else{
 	                    // item OID: Height=IG_VITAL_GROUP1.HeightOID
-	                    String  tempKeyValStr= key+val;
-	                    if(tempKeyValStr != null && tempKeyValStr.trim().length() >0 && !(key.startsWith("#"))){                    	
-		                     
-		                     String[] itemMappingvalue = toArray(val,".");
-		                    // logger.info("===********************itemMappingvalue:" + itemMappingvalue);
-		                     /**
-		                     * save data in each rwo:
-		                     * itemGrpOid -- key -- itemOid
-		                     * one special row for repeatingKey
-		                     * Repeatingkey -- Repeatingkey -- true
-		                     */ 
-		                     //System.out.println(itemMappingvalue);
-							 String itemGrpOid = itemMappingvalue[0]; 
-							 String itemOid = itemMappingvalue[1];
-							 String[]  itemMappingRow = {itemGrpOid,key,itemOid};
-							 
-							 mappedColumnNameList.add(itemMappingRow);
-							 
-							 //itemGroupOIDList contain unique groupOID
-							 if(!(itemGroupOIDList.contains(itemGrpOid))) {
-								 itemGroupOIDList.add(itemGrpOid);
-							 }
-							 
-		               }
+			    		boolean isCorrectFormat = checkFormItemMappingFormat(rawMappingStrRowsStr);
+			    		
+			    		if(isCorrectFormat) {
+			    			 String  tempKeyValStr= key+val;
+			                    if(tempKeyValStr != null && tempKeyValStr.trim().length() >0 && !(key.startsWith("#"))){                    	
+				                     
+				                     String[] itemMappingvalue = toArray(val,".");
+				                    // logger.info("===********************itemMappingvalue:" + itemMappingvalue);
+				                     /**
+				                     * save data in each rwo:
+				                     * itemGrpOid -- key -- itemOid
+				                     * one special row for repeatingKey
+				                     * Repeatingkey -- Repeatingkey -- true
+				                     */ 
+				                     //System.out.println(itemMappingvalue);
+									 String itemGrpOid = itemMappingvalue[0]; 
+									 String itemOid = itemMappingvalue[1];
+									 String[]  itemMappingRow = {itemGrpOid,key,itemOid};
+									 
+									 mappedColumnNameList.add(itemMappingRow);
+									 
+									 //itemGroupOIDList contain unique groupOID
+									 if(!(itemGroupOIDList.contains(itemGrpOid))) {
+										 itemGroupOIDList.add(itemGrpOid);
+									 }
+									 
+				               }
+			    		}
+			    	
+	                   
 
 					if(key.equals("Repeatingkey")){				    		
 					    		mappedValues.put("useRepeatingkey", "TRUE")	;
@@ -409,6 +417,21 @@ public class TextToODMHelper {
 		 mappedValues.put("mappedColumnNameList", mappedColumnNameList)	;
 		 
 		 return mappedValues;
+	}
+
+	/**
+	 * Here is the expected format:
+	 * Height Units=IG_VITAL_GROUP1.HeightUnitsOID
+	 * 
+	 * @param rawMappingStrRowsStr
+	 */
+	private static boolean checkFormItemMappingFormat(String rawMappingStrRowsStr) {
+		// use regular exoression to check item configuration
+		String regex = "^[A-Za-z0-9+_-[ ]*[\n]*]+=[A-Za-z0-9+_-]+[.][A-Za-z0-9+_-]+$";		 
+		Pattern pattern = Pattern.compile(regex);		 
+		
+		Matcher matcher = pattern.matcher(rawMappingStrRowsStr);		
+		return matcher.matches();
 	}
 	
 }
