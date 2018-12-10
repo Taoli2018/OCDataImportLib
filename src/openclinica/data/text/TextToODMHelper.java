@@ -29,6 +29,7 @@ import org.w3c.dom.Element;
 public class TextToODMHelper {
 
 	private String[] columnNms;
+	private HashMap  mappedValues;
 
 	public String transformTextToODMxml(String rawMappingStr,String rawItemData) {
 		
@@ -73,7 +74,7 @@ public class TextToODMHelper {
 				return "errorCode.noParticipantIDinDataFile";
 			}
 			
-			HashMap  mappedValues = getDataMappedValues(rawMappingStr,columnNms); 
+			mappedValues = getDataMappedValues(rawMappingStr,columnNms); 
 			
 			studyOID =(String) mappedValues.get("StudyOID");
 			studyEventOID =(String) mappedValues.get("StudyEventOID");
@@ -377,7 +378,10 @@ public class TextToODMHelper {
 			    }else  if(key.equals("FormOID")){		    	
 			    	mappedValues.put(key, val);						
 			    }else  if(key.equals("FormVersion")){			     	 
-			    	mappedValues.put(key, val);		 		    		 			    		 			          
+			    	mappedValues.put(key, val);
+			    //SkipMatchCriteria	
+			    }else  if(key.equals("SkipMatchCriteria")){			     	 
+			    	mappedValues.put(key, val);	
 			    }else{
 	                    // item OID: Height=IG_VITAL_GROUP1.HeightOID
 			    		boolean isCorrectFormat = checkFormItemMappingFormat(rawMappingStrRowsStr);
@@ -452,4 +456,8 @@ public class TextToODMHelper {
 		return false;
 	}
 	
+    public  String getSkipMatchCriteria() {		
+		
+		return (String) this.mappedValues.get("SkipMatchCriteria");
+	}
 }
