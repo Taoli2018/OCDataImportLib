@@ -182,6 +182,8 @@ public class TextToODMHelper {
 							Element formData = document.createElement("FormData");	
 							formData.setAttribute("FormOID", formOID);						
 							formData.setAttribute("FormLayoutOID", formVersion);
+							//OpenClinica:Status="initial data entry"
+							formData.setAttribute("OpenClinica:Status", "initial data entry");
 							
 							studyEventData.appendChild(formData);
 							subjectData.appendChild(studyEventData);
@@ -295,6 +297,8 @@ public class TextToODMHelper {
 			pce.printStackTrace();
 		} catch (TransformerException tfe) {
 			tfe.printStackTrace();
+		}catch (Exception e) {
+			return e.toString();
 		}
 		
 		return "";
@@ -304,6 +308,8 @@ public class TextToODMHelper {
 	 * @param rawItemData
 	 */
 	private static String[]  getDataColumnNames(String rawItemData) {
+		
+		System.out.println("getDataColumnNames==========================" + rawItemData);
 		ArrayList columnNmsList= new ArrayList();
 		//Iterate to get the item column values
 		 String[] itemDataRows = rawItemData.split(new Character((char) 13).toString());		     
@@ -448,7 +454,9 @@ public class TextToODMHelper {
 	
 	public  boolean hasParticipantIDColumn() {
 		
+		
 		for(int i=0; i < this.columnNms.length; i++) {
+			System.out.println("columnNms==========================" + columnNms[i]);
 			if(columnNms[i].trim().equals("ParticipantID")) {
 				return true;
 			}

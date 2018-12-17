@@ -32,17 +32,17 @@ public class SimpleTest {
 				"54|in|141|lbs|2018-10-12|54|Non-hispanic or latino|Caucasian|||\r\n" + 
 				"";*/
 		
-		String rawMappingStr="StudyOID=S_STUDY3(PROD)\r\n" + 
-				"StudyEventOID=SE_SCREENVISISTCHECKHISTORY\r\n" + 
-				"FormOID=F_MEDICALHISTO\r\n" + 
-				"FormVersion=2\r\n" + 
-				"#list all item with item group OID\r\n" + 
-				"#skip\r\n" + 
-				"SkipMatchCriteria=IG_MEDIC_RG1.I_MEDIC_DIAGNOSIS,IG_MEDIC_RG1.I_MEDIC_ONGOING  \r\n" + 
-				"DIAGNOSIS=IG_MEDIC_RG1.I_MEDIC_DIAGNOSIS\r\n" + 
+		String rawMappingStr="StudyOID=S_STUDY3(PROD)&#13;\r\n" + 
+				"StudyEventOID=SE_SCREENVISISTCHECKHISTORY&#13;\r\n" + 
+				"FormOID=F_MEDICALHISTO&#13;\r\n" + 
+				"FormVersion=2&#13;\r\n" + 
+				"#list all item with item group OID&#13;\r\n" + 
+				"#skip&#13;\r\n" + 
+				"SkipMatchCriteria=IG_MEDIC_RG1.I_MEDIC_DIAGNOSIS,IG_MEDIC_RG1.I_MEDIC_ONGOING &#13;\r\n" + 
+				"DIAGNOSIS=IG_MEDIC_RG1.I_MEDIC_DIAGNOSIS&#13;\r\n" + 
 				"ONGOING=IG_MEDIC_RG1.I_MEDIC_ONGOING";
 		String rawItemData="ParticipantID|DIAGNOSIS|ONGOING\r\n" + 
-				"SS_SUB1|yes|Y";
+				"&#13;SS_SUB2|no11|Y";
 
 		TextToODMHelper helper= new TextToODMHelper();
 		
